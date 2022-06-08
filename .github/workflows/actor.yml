@@ -31,5 +31,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: zipped-bundle
-          path: ${{ github.sha }}
+          path: ${{ github.sha }}.zip
       
