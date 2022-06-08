@@ -1,0 +1,35 @@
+name: Deploy Lambda Function
+on:
+  push:
+    branches: 
+      - main
+
+jobs: 
+  build:
+    runs-on: ubuntu-lastest
+    steps:
+      - name: Check out code
+        uses: action/checkout@v3
+        
+      - name: Setup Pyton
+        uses: action/setup-python@v4
+        with:
+          python-version: 3.8
+          
+      - name: Install Libs
+        run: |
+            cd function
+            python -m pip install --upgrade pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi
+      
+      - name: Create Zip Bundle
+        run: |
+            cd function
+            zip -r ../${{ github.sha }}.zip .
+            
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with: 
+          name: zipped-bundle
+          path: ${{ github.sha }}
+      
